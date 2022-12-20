@@ -53,17 +53,29 @@ typedef struct {
 
 int ler_estudantes(t_estudante alunos[], int);
 
+void atualizar_estudante(t_estudante alunos[], int);
+
+int remover_estudante(t_estudante alunos[], int);
+
 void mostrar_dados_estudante(t_estudante alunos[], int);
 
 /* ####### Atividades ####### */
 
 int ler_atividade(t_atividades atividades[], int);
 
+void atualizar_atividade(t_atividades atividades[], int);
+
+int remover_atividade(t_atividades atividades[], int);
+
 void mostrar_dados_atividade(t_atividades atividades[], int);
 
 /* ####### Inscrições ####### */
 
 int ler_inscricao(t_inscricoes inscricoes[], int);
+
+void atualizar_inscricao(t_inscricoes inscricoes[], int);
+
+int remover_inscricao(t_inscricoes inscricoes[], int);
 
 void mostrar_dados_inscricao(t_inscricoes inscricoes[], int);
 
@@ -101,6 +113,7 @@ int main(){
 
     switch (menu_principal()) { // Vai receber o valor vindo da função main e vai pegar nesse valor e "testa-lo" no switch
         case 1:
+            // Caso seja escolhida a opção de gestão dos estudantes
             switch (menu_estudantes()) {
                 case 0:
                     //Confirmar Saida
@@ -119,6 +132,7 @@ int main(){
             }
 
         case 2:
+            // Caso seja escolhida a opção de gestão das atividades
             switch (menu_atividades()) {
                 case 0:
                     //Confirmar Saida
@@ -137,6 +151,7 @@ int main(){
             }
 
         case 3:
+            // Caso seja escolhida a opção de gestão das inscrições
             switch (menu_inscricoes()) {
                 case 0:
                     //Confirmar Saida
@@ -273,12 +288,16 @@ int menu_inscricoes(){
 
 char  confirmar_saida(){
 
-    char opcao = ' ';
+    char confirmar;
 
-    printf("Deseja mesmo sair?");
-    scanf(" %c", &opcao);
+    do {
 
-    return opcao;
+        printf("Deseja mesmo sair?");
+        scanf(" %c", &confirmar);
+
+    } while(tolower(confirmar) != 's' || tolower(confirmar) != 'n');
+
+    return confirmar;
 }
 
 /* ####### End File ####### */
