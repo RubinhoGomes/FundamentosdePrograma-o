@@ -117,6 +117,7 @@ int main(){
                     printf("Numero 3");
                     break;
             }
+
         case 2:
             switch (menu_atividades()) {
                 case 0:
@@ -134,6 +135,7 @@ int main(){
                     printf("Numero 3");
                     break;
             }
+
         case 3:
             switch (menu_inscricoes()) {
                 case 0:
@@ -151,6 +153,7 @@ int main(){
                     printf("Numero 3");
                     break;
             }
+
         case 4:
             estatistica();
             break;
@@ -228,6 +231,36 @@ int menu_estudantes(){
     printf("[1] - Registar novo estudante\n");
     printf("[2] - Atualizar estudante\n");
     printf("[3] - Remover Estudante\n");
+    printf("[0] - Sair\n\n");
+    printf("Insira uma opção: ");
+    scanf(" %d", &opcao);
+
+    return opcao;
+}
+
+int menu_atividades(){
+
+    int opcao = 0;
+
+    printf("########## Menu Estudante ##########\n\n");
+    printf("[1] - Registar nova atividade\n");
+    printf("[2] - Atualizar atividade\n");
+    printf("[3] - Remover atividade\n");
+    printf("[0] - Sair\n\n");
+    printf("Insira uma opção: ");
+    scanf(" %d", &opcao);
+
+    return opcao;
+}
+
+int menu_inscricoes(){
+
+    int opcao = 0;
+
+    printf("########## Menu Estudante ##########\n\n");
+    printf("[1] - Registar nova inscrição\n");
+    printf("[2] - Atualizar inscrição\n");
+    printf("[3] - Remover inscrição\n");
     printf("[0] - Sair\n\n");
     printf("Insira uma opção: ");
     scanf(" %d", &opcao);
