@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <locale.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "/libraries/dm.h"
+#include "libraries/dm.h"
 
 /* ############################ Constantes ############################ */
 
@@ -66,6 +67,24 @@ int ler_inscricao(t_inscricoes inscricoes[], int);
 
 void mostrar_dados_inscricao(t_inscricoes inscricoes[], int);
 
+/*  ####### Menu #######  */
+
+int menu_principal();
+
+int menu_estudantes();
+
+int menu_atividades();
+
+int menu_inscricoes();
+
+/* ####### Estatistica ####### */
+
+void estatistica();
+
+/* ####### Saida ####### */
+
+char confirmar_saida();
+
 /* ############################ Main ############################ */
 
 int main(){
@@ -78,10 +97,68 @@ int main(){
     int numero_atividades = 0;
     int numero_inscricoes = 0;
 
+    setlocale(LC_ALL, "portuguese");
 
-    numero_estudante = ler_estudantes(alunos, numero_estudante);
+    switch (menu_principal()) { // Vai receber o valor vindo da função main e vai pegar nesse valor e "testa-lo" no switch
+        case 1:
+            switch (menu_estudantes()) {
+                case 0:
+                    //Confirmar Saida
+                    break;
+                case 1:
+                    ler_estudantes(alunos, numero_estudante);
+                    break;
+                case 2:
+                    //Atualizar estudantes
+                    printf("Numero 2");
+                    break;
+                case 3:
+                    //Remover estudantes
+                    printf("Numero 3");
+                    break;
+            }
+        case 2:
+            switch (menu_atividades()) {
+                case 0:
+                    //Confirmar Saida
+                    break;
+                case 1:
+                    // Ler atividade
+                    break;
+                case 2:
+                    //Atualizar Atividade
+                    printf("Numero 2");
+                    break;
+                case 3:
+                    //Remover Atividade
+                    printf("Numero 3");
+                    break;
+            }
+        case 3:
+            switch (menu_inscricoes()) {
+                case 0:
+                    //Confirmar Saida
+                    break;
+                case 1:
+                    //Ler Inscrições
+                    break;
+                case 2:
+                    //Atualizar Inscrições
+                    printf("Numero 2");
+                    break;
+                case 3:
+                    //Remover Inscrições
+                    printf("Numero 3");
+                    break;
+            }
+        case 4:
+            estatistica();
+            break;
+        case 0:
+            confirmar_saida();
+            break;
+    }
 
-    mostrar_dados_estudante(alunos, numero_estudante);
 
     return 0;
 }
@@ -119,14 +196,56 @@ void mostrar_dados_estudante(t_estudante alunos[], int numero_estudantes){
 
 
 
-
-
-
-
-
-
 /* ####### Inscrições ####### */
 
 
+
+/* ####### Menu's ####### */
+
+int menu_principal(){
+
+    int opcao = 0;
+
+    printf("########## Menu Principal ##########\n\n");
+    printf("[1] - Gestão dos dados dos estudantes\n");
+    printf("[2] - Gestão dos dados das atividade\n");
+    printf("[3] - Gestão dos dados das inscrições\n");
+    printf("[4] - Consultar as estatísticas\n");
+    printf("[0] - Sair\n\n");
+    printf("Insira uma opção: ");
+    scanf(" %d", &opcao);
+
+    return opcao;
+
+}
+
+
+int menu_estudantes(){
+
+    int opcao = 0;
+
+    printf("########## Menu Estudante ##########\n\n");
+    printf("[1] - Registar novo estudante\n");
+    printf("[2] - Atualizar estudante\n");
+    printf("[3] - Remover Estudante\n");
+    printf("[0] - Sair\n\n");
+    printf("Insira uma opção: ");
+    scanf(" %d", &opcao);
+
+    return opcao;
+}
+
+
+/* ####### Saida ####### */
+
+char  confirmar_saida(){
+
+    char opcao = ' ';
+
+    printf("Deseja mesmo sair?");
+    scanf(" %c", &opcao);
+
+    return opcao;
+}
 
 /* ####### End File ####### */
