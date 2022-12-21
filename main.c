@@ -109,6 +109,8 @@ int main(){
     int numero_atividades = 0;
     int numero_inscricoes = 0;
 
+    char confirmar = ' ';
+
     setlocale(LC_ALL, "portuguese");
 
     switch (menu_principal()) { // Vai receber o valor vindo da função main e vai pegar nesse valor e "testa-lo" no switch
@@ -173,7 +175,7 @@ int main(){
             estatistica();
             break;
         case 0:
-            confirmar_saida();
+            confirmar = confirmar_saida();
             break;
     }
 
@@ -281,6 +283,14 @@ int menu_inscricoes(){
     scanf(" %d", &opcao);
 
     return opcao;
+}
+
+/* ####### Estatistica ####### */
+
+void estatistica(){
+
+    printf("Bom Dia.");
+
 }
 
 
