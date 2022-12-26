@@ -11,5 +11,5 @@ int verificar_ficheiro(char*);
 
 int abrir_ficheiro(FILE*);
 
-#endif //PROJECT_DM_H
+#endif //PROJECT_DM_
 

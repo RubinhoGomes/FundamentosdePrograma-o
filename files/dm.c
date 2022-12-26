@@ -6,7 +6,7 @@
 
 int verificar_ficheiro(char* file){
 
-    if(fopen(file, "r+")){
+    if(fopen(file, "rb+")){
         return 1;
     } else {
         return -1;

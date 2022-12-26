@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <time.h>
 #include "libraries/dm.h"
 
 /* ############################ Constantes ############################ */
@@ -50,13 +51,21 @@ typedef struct {
 
 /* ############################ Prototipos ############################ */
 
+void anular_estudante(t_estudante alunos[], int);
+
+int ler_opcao();
+
+int encontrar_nif(t_estudante alunos[], int, unsigned int);
+
+unsigned int pedir_nif();
+
 /* ####### Estudantes ####### */
 
 int ler_estudantes(t_estudante alunos[], int);
 
 void atualizar_estudante(t_estudante alunos[], int);
 
-int remover_estudante(t_estudante alunos[], int);
+int remover_estudante(t_estudante alunos[], int, int);
 
 void mostrar_dados_estudante(t_estudante alunos[], int);
 
@@ -109,12 +118,15 @@ int main(){
     int numero_estudante = 0;
     int numero_atividades = 0;
     int numero_inscricoes = 0;
+    unsigned int nif = 0;
+    int indice_remover = 0;
 
     char confirmar = ' ';
 
     setlocale(LC_ALL, "Portuguese");
 
     do {
+        fflush(stdin);
         switch (menu_principal()) { // Vai receber o valor vindo da função main e vai pegar nesse valor e "testa-lo" no switch
             case 1:
                 // Caso seja escolhida a opção de gestão dos estudantes
@@ -135,7 +147,9 @@ int main(){
                         break;
                     case 4:
                         //Remover estudantes
-                        printf("Numero 3");
+                        nif = pedir_nif(); // Vai pedir ao utilizador o NIF
+                        indice_remover = encontrar_nif(alunos, numero_estudante, nif); // Vai percorrer os estudantes a procura do NIF inserido e devolver o indice onde foi encontrado
+                        numero_estudante = remover_estudante(alunos, numero_estudante, indice_remover); // Vai remover o estudante com o NIF inserido e encontrado anteriormente
                         break;
                 }
                 break;
@@ -187,9 +201,8 @@ int main(){
                 confirmar = confirmar_saida();
                 break;
         }
+
     } while(tolower(confirmar) != 's');
-
-
 
 
     return 0;
@@ -197,6 +210,54 @@ int main(){
 
 
 /* ############################ Funções ############################ */
+
+void anular_estudante(t_estudante alunos[], int numero_estudante){
+
+    alunos[numero_estudante].id = 0;
+    strcpy(alunos[numero_estudante].nome, '\0');
+    strcpy(alunos[numero_estudante].escola, '\0');
+    strcpy(alunos[numero_estudante].email, '\0');
+    strcpy(alunos[numero_estudante].nif, '\0');
+    strcpy(alunos[numero_estudante].telefone, '\0');
+}
+
+int ler_opcao(){ // Esta função vai ler uma opção listada nos menu's e vai dar return a opção desejada
+
+    int opcao = 0;
+
+    printf("Insira uma opção: ");
+    scanf(" %d", &opcao);
+
+    return opcao;
+}
+
+unsigned int pedir_nif(){ // Esta função vai servir para pedir o NIF para ser utilizado no remover e atualizar estudante.
+
+    unsigned int nif = 0;
+
+    printf("Insira o NIF do estudante que quer eliminar: ");
+    scanf(" %u", &nif);
+
+    return nif;
+
+}
+
+int encontrar_nif(t_estudante alunos[], int numero_estudante, unsigned int nif){ // Esta função vai encontrar o NIF dos estudantes que existem, caso não encontre vai retornar o valor -1
+
+    char nif_char[10];
+    int index = -1;
+
+    sprintf(nif_char, "%u", nif);
+
+    for(int contador = 0; contador <= numero_estudante; contador++){
+        if(strcmp(alunos[contador].nif, nif_char) == 0){
+            index = contador;
+        }
+    }
+
+    return index;
+}
+
 
 /* ####### Estudantes ####### */
 
@@ -237,28 +298,40 @@ void mostrar_dados_estudante(t_estudante alunos[], int numero_estudantes){
 
 void atualizar_estudante(t_estudante alunos[], int numero_estudantes){
 
-    int indice_estudante = -1;
-    char email[100];
+    int indice_estudante;
+    unsigned int nif;
 
+    nif = pedir_nif();
 
-    printf("Insira o email do estudante que deseja alterar: ");
-    scanf(" %[^\n]s", email);
+    indice_estudante = encontrar_nif(alunos, numero_estudantes, nif);
 
-    for(int contador = 0; contador <= numero_estudantes; contador++){
-        if(strcmp(alunos[contador].email, email) == 0){
-            indice_estudante = contador;
+    if(indice_estudante >= 0){
+        printf("\nInsira os novos valores para o estudante, %s\n", alunos[indice_estudante].nome);
+        ler_estudantes(alunos, indice_estudante);
+    } else {
+        printf("\n **Não foi encontrado o aluno com esse email** \n");
+    }
+}
+
+int remover_estudante(t_estudante alunos[], int numero_estudante, int indice_remover){
+
+    char string_vazia[10] = { ' ' };
+
+    for(int contador = indice_remover; contador <= numero_estudante; contador++) {
+        if(strcmp(string_vazia, alunos[contador + 1].nif) == 0){
+            anular_estudante(alunos, contador);
+        } else {
+            alunos[contador].id = alunos[contador + 1].id;
+            strcpy(alunos[contador].nome, alunos[contador + 1].nome);
+            strcpy(alunos[contador].escola, alunos[contador + 1].escola);
+            strcpy(alunos[contador].email, alunos[contador+ 1].email);
+            strcpy(alunos[contador].nif, alunos[contador + 1].nif);
+            strcpy(alunos[contador].telefone, alunos[contador + 1].telefone);
         }
     }
 
-    if(indice_estudante >= 0){
-        printf("Insira os novos valores para o estudante, %s\n", alunos[indice_estudante].nome);
-        ler_estudantes(alunos, indice_estudante);
-    }else {
-        printf("Não foi encontrado o aluno com esse email\n");
-    }
-
+    return (numero_estudante - 1);
 }
-
 
 /* ####### Atividades ####### */
 
@@ -280,25 +353,18 @@ int ler_atividade(t_atividades atividades[], int numero_atividades){
 
 int menu_principal(){
 
-    int opcao = 0;
-
     printf("########## Menu Principal ##########\n\n");
     printf("[1] - Gestão dos dados dos estudantes\n");
     printf("[2] - Gestão dos dados das atividade\n");
     printf("[3] - Gestão dos dados das inscrições\n");
     printf("[4] - Consultar as estatísticas\n");
     printf("[0] - Sair\n\n");
-    printf("Insira uma opção: ");
-    scanf(" %d", &opcao);
 
-    return opcao;
+    return ler_opcao();
 
 }
 
-
 int menu_estudantes(){
-
-    int opcao = 0;
 
     printf("########## Menu Estudante ##########\n\n");
     printf("[1] - Registar novo estudante\n");
@@ -306,40 +372,30 @@ int menu_estudantes(){
     printf("[3] - Atualizar estudante\n");
     printf("[4] - Remover Estudante\n");
     printf("[0] - Sair\n\n");
-    printf("Insira uma opção: ");
-    scanf(" %d", &opcao);
 
-    return opcao;
+    return ler_opcao();
 }
 
 int menu_atividades(){
-
-    int opcao = 0;
 
     printf("########## Menu Estudante ##########\n\n");
     printf("[1] - Registar nova atividade\n");
     printf("[2] - Atualizar atividade\n");
     printf("[3] - Remover atividade\n");
     printf("[0] - Sair\n\n");
-    printf("Insira uma opção: ");
-    scanf(" %d", &opcao);
 
-    return opcao;
+    return ler_opcao();
 }
 
 int menu_inscricoes(){
-
-    int opcao = 0;
 
     printf("########## Menu Estudante ##########\n\n");
     printf("[1] - Registar nova inscrição\n");
     printf("[2] - Atualizar inscrição\n");
     printf("[3] - Remover inscrição\n");
     printf("[0] - Sair\n\n");
-    printf("Insira uma opção: ");
-    scanf(" %d", &opcao);
 
-    return opcao;
+    return ler_opcao();
 }
 
 /* ####### Estatistica ####### */
@@ -355,7 +411,7 @@ void estatistica(){
 
 char  confirmar_saida(){
 
-    char confirmar;
+    char confirmar = ' ';
 
     do {
 
