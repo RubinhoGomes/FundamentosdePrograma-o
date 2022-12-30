@@ -252,6 +252,7 @@ int encontrar_nif(t_estudante alunos[], int numero_estudante, unsigned int nif){
     for(int contador = 0; contador <= numero_estudante; contador++){
         if(strcmp(alunos[contador].nif, nif_char) == 0){
             index = contador;
+            printf("%d", index);
         }
     }
 
@@ -315,18 +316,9 @@ void atualizar_estudante(t_estudante alunos[], int numero_estudantes){
 
 int remover_estudante(t_estudante alunos[], int numero_estudante, int indice_remover){
 
-    char string_vazia[10] = { ' ' };
-
-    for(int contador = indice_remover; contador <= numero_estudante; contador++) {
-        if(strcmp(string_vazia, alunos[contador + 1].nif) == 0){
-            anular_estudante(alunos, contador);
-        } else {
-            alunos[contador].id = alunos[contador + 1].id;
-            strcpy(alunos[contador].nome, alunos[contador + 1].nome);
-            strcpy(alunos[contador].escola, alunos[contador + 1].escola);
-            strcpy(alunos[contador].email, alunos[contador+ 1].email);
-            strcpy(alunos[contador].nif, alunos[contador + 1].nif);
-            strcpy(alunos[contador].telefone, alunos[contador + 1].telefone);
+    if(indice_remover >= 0){
+        for(int contador = indice_remover; contador <= numero_estudante; contador++) {
+            alunos[contador] = alunos[contador + 1];
         }
     }
 
