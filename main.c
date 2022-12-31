@@ -1,3 +1,8 @@
+/* ## Projeto De Programação ##
+ * Aplicação para a Associação de Estudantes
+ * Made by Rúben Gomes & João Carreira
+ */
+
 #include <stdio.h>
 #include <locale.h>
 #include <stdlib.h>
@@ -51,23 +56,22 @@ typedef struct {
 
 /* ############################ Prototipos ############################ */
 
-void anular_estudante(t_estudante alunos[], int);
+/* ####### Estudantes ####### */
+
+int ler_estudantes(t_estudante alunos[], int);
+
+void atualizar_estudante(t_estudante alunos[], int, int);
+
+int remover_estudante(t_estudante alunos[], int, int);
+
+void mostrar_dados_estudante(t_estudante alunos[], int);
 
 int ler_opcao();
 
 int encontrar_nif(t_estudante alunos[], int, unsigned int);
 
-unsigned int pedir_nif();
+unsigned int pedir_nif(char frase[]);
 
-/* ####### Estudantes ####### */
-
-int ler_estudantes(t_estudante alunos[], int);
-
-void atualizar_estudante(t_estudante alunos[], int);
-
-int remover_estudante(t_estudante alunos[], int, int);
-
-void mostrar_dados_estudante(t_estudante alunos[], int);
 
 /* ####### Atividades ####### */
 
@@ -103,6 +107,12 @@ int menu_inscricoes();
 
 void estatistica();
 
+int atividades_realizadas(t_atividades atividades[], int);
+
+int percentagem_inscricoes(t_inscricoes inscricoes[], int);
+
+int valor_total();
+
 /* ####### Saida ####### */
 
 char confirmar_saida();
@@ -119,7 +129,7 @@ int main(){
     int numero_atividades = 0;
     int numero_inscricoes = 0;
     unsigned int nif = 0;
-    int indice_remover = 0;
+    int indice_estudante = -1;
 
     char confirmar = ' ';
 
@@ -145,13 +155,15 @@ int main(){
                         break;
                     case 3:
                         // Atualizar estudantes
-                        atualizar_estudante(alunos, numero_estudante);
+                        nif = pedir_nif("que deseja atualiza");
+                        indice_estudante = encontrar_nif(alunos, numero_estudante, nif);
+                        atualizar_estudante(alunos, numero_estudante, indice_estudante);
                         break;
                     case 4:
                         // Remover estudantes
-                        nif = pedir_nif(); // Vai pedir ao utilizador o NIF
-                        indice_remover = encontrar_nif(alunos, numero_estudante, nif); // Vai percorrer os estudantes a procura do NIF inserido e devolver o indice onde foi encontrado
-                        numero_estudante = remover_estudante(alunos, numero_estudante, indice_remover); // Vai remover o estudante com o NIF inserido e encontrado anteriormente
+                        nif = pedir_nif("que deseja remover"); // Vai pedir ao utilizador o NIF
+                        indice_estudante = encontrar_nif(alunos, numero_estudante, nif); // Vai percorrer os estudantes a procura do NIF inserido e devolver o indice onde foi encontrado
+                        numero_estudante = remover_estudante(alunos, numero_estudante, indice_estudante); // Vai remover o estudante com o NIF inserido e encontrado anteriormente
                         break;
                 }
                 break;
@@ -238,6 +250,7 @@ int ler_estudantes(t_estudante alunos[], int numero_estudantes){
 /* Mostrar Dados dos Estudantes */
 
 void mostrar_dados_estudante(t_estudante alunos[], int numero_estudantes){
+    printf("\n");
     for(int contador = 0; contador <= numero_estudantes; contador++){
         if(alunos[contador].id > 0){
             printf("* [%u]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s] *\n", alunos[contador].id, alunos[contador].nome, alunos[contador].escola, alunos[contador].nif, alunos[contador].email, alunos[contador].telefone);
@@ -250,14 +263,7 @@ void mostrar_dados_estudante(t_estudante alunos[], int numero_estudantes){
 
 /* Atualizar dados dos estudantes */
 
-void atualizar_estudante(t_estudante alunos[], int numero_estudantes){
-
-    int indice_estudante;
-    unsigned int nif;
-
-    nif = pedir_nif();
-
-    indice_estudante = encontrar_nif(alunos, numero_estudantes, nif);
+void atualizar_estudante(t_estudante alunos[], int numero_estudantes, int indice_estudante){
 
     if(indice_estudante >= 0){
         printf("\nInsira os novos valores para o estudante, %s\n", alunos[indice_estudante].nome);
@@ -282,11 +288,11 @@ int remover_estudante(t_estudante alunos[], int numero_estudante, int indice_rem
 
 /* Pedir NIF */
 
-unsigned int pedir_nif(){ // Esta função vai servir para pedir o NIF para ser utilizado no remover e atualizar estudante.
+unsigned int pedir_nif(char frase[]){ // Esta função vai servir para pedir o NIF para ser utilizado no remover e atualizar estudante.
 
     unsigned int nif = 0;
 
-    printf("Insira o NIF do estudante que quer eliminar: ");
+    printf("Insira o NIF do estudante, %s: ", frase);
     scanf(" %u", &nif);
 
     return nif;
