@@ -9,14 +9,12 @@
 #include <ctype.h>
 #include <string.h>
 #include <time.h>
-#include "libraries/dm.h"
 
 /* ############################ Constantes ############################ */
 
 #define NUMERO_PARTICIPANTES 5000 // Numero maximo de inscrições dos Participantes
 #define NUMERO_ATIVIDAES  200 // Numero maximo das atividades
 #define NUMERO_INSCRICOES 10000 // Numero maximo de inscrições
-
 
 /* ############################ Estruturas ############################ */
 
@@ -62,9 +60,9 @@ int ler_estudantes(t_estudante alunos[], int);
 
 void atualizar_estudante(t_estudante alunos[], int, int);
 
-int remover_estudante(t_estudante alunos[], int, int);
-
 void mostrar_dados_estudante(t_estudante alunos[], int);
+
+int remover_estudante(t_estudante alunos[], int, int);
 
 int ler_opcao();
 
