@@ -3,6 +3,8 @@
  * Made by Rúben Gomes & João Carreira
  */
 
+/* ############################ Bibliotecas ############################ */
+
 #include <stdio.h>
 #include <locale.h>
 #include <stdlib.h>
@@ -174,6 +176,7 @@ int main(){
                         break;
                     case 1:
                         // Ler atividade
+                        numero_atividades = ler_atividade(atividades, numero_atividades);
                         break;
                     case 2:
                         //Atualizar Atividade
@@ -224,8 +227,12 @@ int main(){
 /* ############################ Funções ############################ */
 
 /* ####### Estudantes ####### */
-
-/* Ler Estudante */
+/**
+ * Ler Estudante
+ * @param alunos
+ * @param numero_estudantes
+ * @return int
+ */
 
 int ler_estudantes(t_estudante alunos[], int numero_estudantes){
 
@@ -245,7 +252,11 @@ int ler_estudantes(t_estudante alunos[], int numero_estudantes){
     return (numero_estudantes + 1);
 }
 
-/* Mostrar Dados dos Estudantes */
+/**
+ * Mostrar Dados dos Estudantes
+ * @param alunos
+ * @param numero_estudantes
+ */
 
 void mostrar_dados_estudante(t_estudante alunos[], int numero_estudantes){
     printf("\n");
@@ -259,7 +270,12 @@ void mostrar_dados_estudante(t_estudante alunos[], int numero_estudantes){
     system("pause");
 }
 
-/* Atualizar dados dos estudantes */
+/**
+ * Atualizar dados dos estudantes
+ * @param alunos
+ * @param numero_estudantes
+ * @param indice_estudante
+ */
 
 void atualizar_estudante(t_estudante alunos[], int numero_estudantes, int indice_estudante){
 
@@ -271,7 +287,13 @@ void atualizar_estudante(t_estudante alunos[], int numero_estudantes, int indice
     }
 }
 
-/* Remover Estudante */
+/**
+ * Remover Estudante
+ * @param alunos
+ * @param numero_estudante
+ * @param indice_remover
+ * @return int
+ */
 
 int remover_estudante(t_estudante alunos[], int numero_estudante, int indice_remover){
 
@@ -284,7 +306,11 @@ int remover_estudante(t_estudante alunos[], int numero_estudante, int indice_rem
     return (numero_estudante);
 }
 
-/* Pedir NIF */
+/**
+ * Pedir NIF
+ * @param frase
+ * @return unsigned int
+ */
 
 unsigned int pedir_nif(char frase[]){ // Esta função vai servir para pedir o NIF para ser utilizado no remover e atualizar estudante.
 
@@ -297,7 +323,13 @@ unsigned int pedir_nif(char frase[]){ // Esta função vai servir para pedir o N
 
 }
 
-/* Encontrar NIF */
+/**
+ * Encontrar o NIF
+ * @param alunos
+ * @param numero_estudante
+ * @param nif
+ * @return int
+ */
 
 int encontrar_nif(t_estudante alunos[], int numero_estudante, unsigned int nif){ // Esta função vai encontrar o NIF dos estudantes que existem, caso não encontre vai retornar o valor -1
 
@@ -320,15 +352,43 @@ int encontrar_nif(t_estudante alunos[], int numero_estudante, unsigned int nif){
 }
 
 
-/* ####### Atividades ####### */
+/**
+ * Ler as Atividades
+ * @param atividades
+ * @param numero_atividades
+ * @return int
+ */
 
 int ler_atividade(t_atividades atividades[], int numero_atividades){
 
-    printf("Insira a associação de estudantes: ");
+    printf("Insira a desginação da atividade: ");
+    scanf(" %[^\n]s", atividades[numero_atividades].designacao);
+    printf("Insira a data da atividade: ");
+    scanf(" %[^\n]s", atividades[numero_atividades].data);
+    printf("Insira a hora da atividade: ");
+    scanf(" %[^\n]s", atividades[numero_atividades].hora);
+    printf("Insira o genero da atividade: ");
+    scanf(" %[^\n]s", atividades[numero_atividades].tipo);
+    printf("Insira a associação de estudantes promotora da atividade: ");
     scanf(" %[^\n]s", atividades[numero_atividades].associacao_estudantes);
+    printf("Insira a localização: ");
+    scanf(" %[^\n]s", atividades[numero_atividades].local);
+    printf("Insira a associação de estudantes: ");
+    scanf(" %f", atividades[numero_atividades].preco);
 
     return numero_atividades + 1;
+}
 
+void mostrar_atividades(t_atividades atividades, int numero_atividades){
+
+    for(int contador = 0; contador < numero_atividades; contador++){
+        if(atividades[contador].id > 0){
+            printf("* [%u]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s] *\n", atividades[contador].id);
+        } else if(atividades[contador].id <= 0 && numero_atividades <= 0){
+            printf("\n\n** Não existem dados dos estudantes. **\n\n");
+        }
+    }
+    system("pause");
 }
 
 
@@ -415,7 +475,7 @@ char  confirmar_saida(){
         printf("Deseja mesmo sair?");
         scanf(" %c", &confirmar);
 
-    } while(tolower(confirmar) != 's' || tolower(confirmar) != 'n');
+    } while(tolower(confirmar) != 's' && tolower(confirmar) != 'n');
 
     return confirmar;
 }
