@@ -379,11 +379,11 @@ int ler_atividade(t_atividades atividades[], int numero_atividades){
     return numero_atividades + 1;
 }
 
-void mostrar_atividades(t_atividades atividades, int numero_atividades){
+void mostrar_atividades(t_atividades atividades[], int numero_atividades){
 
     for(int contador = 0; contador < numero_atividades; contador++){
         if(atividades[contador].id > 0){
-            printf("* [%u]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s] *\n", atividades[contador].id);
+            printf("* [%u] *\n", atividades[contador].id); // 	[%s]	[%s]	[%s]	[%s]	[%s]
         } else if(atividades[contador].id <= 0 && numero_atividades <= 0){
             printf("\n\n** Não existem dados dos estudantes. **\n\n");
         }
