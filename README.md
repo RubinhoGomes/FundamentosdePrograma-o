@@ -9,7 +9,13 @@
 * Novo e Consultar Inscrições
 * Estatisticas
 
-
 ***
 
 ## Tarefas Extras:
+* Atualizar e Remover Estudantes
+* Atualizar e Remover Atividades
+* Atualizar e Remover Inscrições
+
+***
+
+## Authors Rúben Gomes && João Carreira
