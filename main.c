@@ -58,22 +58,46 @@ typedef struct {
 
 /* ####### Estudantes ####### */
 
-int ler_estudantes(t_estudante alunos[], int);
+int ler_estudantes(t_estudante [], int);
 
-void mostrar_dados_estudante(t_estudante alunos[], int);
+void mostrar_dados_estudante(t_estudante [], int);
 
 
 /* ####### Atividades ####### */
 
-int ler_atividade(t_atividades atividades[], int);
+int ler_atividade(t_atividades [], int);
 
-void mostrar_dados_atividade(t_atividades atividades[], int);
+void mostrar_dados_atividade(t_atividades [], int);
 
 /* ####### Inscrições ####### */
 
-int ler_inscricao(t_inscricoes inscricoes[], int);
+int ler_inscricao(t_inscricoes [], int);
 
-void mostrar_dados_inscricao(t_inscricoes inscricoes[], int);
+void mostrar_dados_inscricao(t_inscricoes [], int);
+
+/* ####### Ficheiros ####### */
+
+void verificar_ficheiro(char []);
+
+void criar_ficheiro(char []);
+
+/* ## Estudantes ## */
+
+int ler_f_estudantes(t_estudante []);
+
+void guardar_f_estudantes(t_estudante [], int);
+
+/* ## Atividades ## */
+
+int ler_f_atividades(t_atividades []);
+
+void guardar_f_atividades(t_atividades [], int);
+
+/* ## Inscrições ## */
+
+int ler_f_inscricoes(t_inscricoes []);
+
+void guardar_f_inscricoes(t_inscricoes [], int);
 
 /* ####### Extras ####### */
 
@@ -187,10 +211,14 @@ int main(){
                         numero_atividades = ler_atividade(atividades, numero_atividades);
                         break;
                     case 2:
+                        // Mostrar Atividade
+                        mostrar_dados_atividade(atividades, numero_atividades);
+                        break;
+                    case 3:
                         //Atualizar Atividade
                         printf("Numero 2");
                         break;
-                    case 3:
+                    case 4:
                         //Remover Atividade
                         printf("Numero 3");
                         break;
@@ -287,6 +315,8 @@ void mostrar_dados_estudante(t_estudante alunos[], int numero_estudantes){
 
 int ler_atividade(t_atividades atividades[], int numero_atividades){
 
+    atividades[numero_atividades].id = numero_atividades + 1;
+
     printf("Insira a desginação da atividade: ");
     scanf(" %[^\n]s", atividades[numero_atividades].designacao);
     printf("Insira a data da atividade: ");
@@ -310,7 +340,7 @@ int ler_atividade(t_atividades atividades[], int numero_atividades){
  * @param atividades
  * @param numero_atividades
  */
-void mostrar_atividades(t_atividades atividades[], int numero_atividades){
+void mostrar_dados_atividade(t_atividades atividades[], int numero_atividades){
 
     for(int contador = 0; contador < numero_atividades; contador++){
         if(atividades[contador].id > 0){
@@ -325,6 +355,34 @@ void mostrar_atividades(t_atividades atividades[], int numero_atividades){
 
 /* ####### Inscrições ####### */
 
+
+/* ####### Ficheiros ####### */
+
+void verificar_ficheiro(char nome[]){
+    FILE *ficheiro;
+
+    ficheiro = fopen(nome, "rb");
+    if(ficheiro == NULL){
+        criar_ficheiro(nome);
+    }
+    fclose(ficheiro);
+}
+
+void criar_ficheiro(char nome[]){
+    FILE *ficheiro;
+
+    ficheiro = fopen(nome, "r+b");
+    fclose(ficheiro);
+}
+
+/* ## Estudante ## */
+
+int ler_f_estudantes(t_estudante alunos[]){
+    int numero_estudante;
+
+    return numero_estudante;
+
+}
 
 /* ####### Extras  ####### */
 
@@ -457,7 +515,8 @@ int menu_atividades(){
 
     printf("########## Menu Estudante ##########\n\n");
     printf("[1] - Registar nova atividade\n");
-    printf("[2] - Atualizar atividade\n");
+    printf("[2] - Mostrar atividades\n");
+    printf("[3] - Atualizar atividade\n");
     printf("[3] - Remover atividade\n");
     printf("[0] - Sair\n\n");
 
