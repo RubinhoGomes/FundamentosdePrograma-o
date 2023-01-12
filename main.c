@@ -60,9 +60,26 @@ typedef struct {
 
 int ler_estudantes(t_estudante alunos[], int);
 
-void atualizar_estudante(t_estudante alunos[], int, int);
-
 void mostrar_dados_estudante(t_estudante alunos[], int);
+
+
+/* ####### Atividades ####### */
+
+int ler_atividade(t_atividades atividades[], int);
+
+void mostrar_dados_atividade(t_atividades atividades[], int);
+
+/* ####### Inscrições ####### */
+
+int ler_inscricao(t_inscricoes inscricoes[], int);
+
+void mostrar_dados_inscricao(t_inscricoes inscricoes[], int);
+
+/* ####### Extras ####### */
+
+/* Estudante */
+
+void atualizar_estudante(t_estudante alunos[], int, int);
 
 int remover_estudante(t_estudante alunos[], int, int);
 
@@ -72,26 +89,17 @@ int encontrar_nif(t_estudante alunos[], int, unsigned int);
 
 unsigned int pedir_nif(char frase[]);
 
-
-/* ####### Atividades ####### */
-
-int ler_atividade(t_atividades atividades[], int);
+/* Atividades */
 
 void atualizar_atividade(t_atividades atividades[], int);
 
 int remover_atividade(t_atividades atividades[], int);
 
-void mostrar_dados_atividade(t_atividades atividades[], int);
-
-/* ####### Inscrições ####### */
-
-int ler_inscricao(t_inscricoes inscricoes[], int);
+/* Inscrições */
 
 void atualizar_inscricao(t_inscricoes inscricoes[], int);
 
 int remover_inscricao(t_inscricoes inscricoes[], int);
-
-void mostrar_dados_inscricao(t_inscricoes inscricoes[], int);
 
 /*  ####### Menu #######  */
 
@@ -271,6 +279,58 @@ void mostrar_dados_estudante(t_estudante alunos[], int numero_estudantes){
 }
 
 /**
+ * Ler as Atividades
+ * @param atividades
+ * @param numero_atividades
+ * @return int
+ */
+
+int ler_atividade(t_atividades atividades[], int numero_atividades){
+
+    printf("Insira a desginação da atividade: ");
+    scanf(" %[^\n]s", atividades[numero_atividades].designacao);
+    printf("Insira a data da atividade: ");
+    scanf(" %[^\n]s", atividades[numero_atividades].data);
+    printf("Insira a hora da atividade: ");
+    scanf(" %[^\n]s", atividades[numero_atividades].hora);
+    printf("Insira o genero da atividade: ");
+    scanf(" %[^\n]s", atividades[numero_atividades].tipo);
+    printf("Insira a associação de estudantes promotora da atividade: ");
+    scanf(" %[^\n]s", atividades[numero_atividades].associacao_estudantes);
+    printf("Insira a localização: ");
+    scanf(" %[^\n]s", atividades[numero_atividades].local);
+    printf("Insira a associação de estudantes: ");
+    scanf(" %f", atividades[numero_atividades].preco);
+
+    return numero_atividades + 1;
+}
+
+/**
+ * Mostrar Atividades
+ * @param atividades
+ * @param numero_atividades
+ */
+void mostrar_atividades(t_atividades atividades[], int numero_atividades){
+
+    for(int contador = 0; contador < numero_atividades; contador++){
+        if(atividades[contador].id > 0){
+            printf("* [%u] *\n", atividades[contador].id); // 	[%s]	[%s]	[%s]	[%s]	[%s]
+        } else if(atividades[contador].id <= 0 && numero_atividades <= 0){
+            printf("\n\n** Não existem dados dos estudantes. **\n\n");
+        }
+    }
+    system("pause");
+}
+
+
+/* ####### Inscrições ####### */
+
+
+/* ####### Extras  ####### */
+
+/* ## Estudante ## */
+
+/**
  * Atualizar dados dos estudantes
  * @param alunos
  * @param numero_estudantes
@@ -351,49 +411,9 @@ int encontrar_nif(t_estudante alunos[], int numero_estudante, unsigned int nif){
     return index;
 }
 
+/* ## Atividades ## */
 
-/**
- * Ler as Atividades
- * @param atividades
- * @param numero_atividades
- * @return int
- */
-
-int ler_atividade(t_atividades atividades[], int numero_atividades){
-
-    printf("Insira a desginação da atividade: ");
-    scanf(" %[^\n]s", atividades[numero_atividades].designacao);
-    printf("Insira a data da atividade: ");
-    scanf(" %[^\n]s", atividades[numero_atividades].data);
-    printf("Insira a hora da atividade: ");
-    scanf(" %[^\n]s", atividades[numero_atividades].hora);
-    printf("Insira o genero da atividade: ");
-    scanf(" %[^\n]s", atividades[numero_atividades].tipo);
-    printf("Insira a associação de estudantes promotora da atividade: ");
-    scanf(" %[^\n]s", atividades[numero_atividades].associacao_estudantes);
-    printf("Insira a localização: ");
-    scanf(" %[^\n]s", atividades[numero_atividades].local);
-    printf("Insira a associação de estudantes: ");
-    scanf(" %f", atividades[numero_atividades].preco);
-
-    return numero_atividades + 1;
-}
-
-void mostrar_atividades(t_atividades atividades[], int numero_atividades){
-
-    for(int contador = 0; contador < numero_atividades; contador++){
-        if(atividades[contador].id > 0){
-            printf("* [%u] *\n", atividades[contador].id); // 	[%s]	[%s]	[%s]	[%s]	[%s]
-        } else if(atividades[contador].id <= 0 && numero_atividades <= 0){
-            printf("\n\n** Não existem dados dos estudantes. **\n\n");
-        }
-    }
-    system("pause");
-}
-
-
-/* ####### Inscrições ####### */
-
+/* ## Inscrições ## */
 
 
 /* ####### Menu's ####### */
