@@ -17,6 +17,10 @@
 #define NUMERO_PARTICIPANTES 5000 // Numero maximo de inscrições dos Participantes
 #define NUMERO_ATIVIDAES  200 // Numero maximo das atividades
 #define NUMERO_INSCRICOES 10000 // Numero maximo de inscrições
+#define FICHEIRO_ESTUDANTE "estudantes.dat" // Nome do Ficheiro para guardar os dados
+#define FICHEIRO_ATIVIDADES "atividades.dat" // Nome do Ficheiro para guardar os dados
+#define FICHEIRO_INSCRICOES "inscricoes.dat" // Nome do Ficheiro para guardar os dados
+
 
 /* ############################ Estruturas ############################ */
 
@@ -83,21 +87,21 @@ void criar_ficheiro(char []);
 
 /* ## Estudantes ## */
 
-int ler_f_estudantes(t_estudante []);
+void ler_f_estudantes(t_estudante [], int*);
 
-void guardar_f_estudantes(t_estudante [], int);
+void guardar_f_estudantes(t_estudante [], int*);
 
 /* ## Atividades ## */
+// TODO: FAZER FICHEIRO ATIVIDADES
+void ler_f_atividades(t_atividades [], int*);
 
-int ler_f_atividades(t_atividades []);
-
-void guardar_f_atividades(t_atividades [], int);
+void guardar_f_atividades(t_atividades [], int*);
 
 /* ## Inscrições ## */
+// TODO: FAZER FICHEIRO INSCRIÇÕES
+void ler_f_inscricoes(t_inscricoes [], int*);
 
-int ler_f_inscricoes(t_inscricoes []);
-
-void guardar_f_inscricoes(t_inscricoes [], int);
+void guardar_f_inscricoes(t_inscricoes [], int*);
 
 /* ####### Extras ####### */
 
@@ -114,13 +118,13 @@ int encontrar_nif(t_estudante alunos[], int, unsigned int);
 unsigned int pedir_nif(char frase[]);
 
 /* Atividades */
-
+// TODO: NOT URGENT: Mas Fazer EXTRA Atividades
 void atualizar_atividade(t_atividades atividades[], int);
 
 int remover_atividade(t_atividades atividades[], int);
 
 /* Inscrições */
-
+// TODO: NOT URGENT: Mas Fazer EXTRA Inscrições
 void atualizar_inscricao(t_inscricoes inscricoes[], int);
 
 int remover_inscricao(t_inscricoes inscricoes[], int);
@@ -134,9 +138,11 @@ int menu_estudantes();
 int menu_atividades();
 
 int menu_inscricoes();
+// TODO: Fazer Menu Atividades Para vizualizarmos os vários valores das estatisticas
+int menu_ver_atividades();
 
 /* ####### Estatistica ####### */
-
+// TODO: Fazer Estatisticas
 void estatistica();
 
 int atividades_realizadas(t_atividades atividades[], int);
@@ -166,6 +172,9 @@ int main(){
     char confirmar = ' ';
 
     setlocale(LC_ALL, "Portuguese");
+
+    //TODO: Colocar aqui o ler das varias estruturas
+
 
     do {
         fflush(stdin);
@@ -254,11 +263,10 @@ int main(){
         }
 
     } while(tolower(confirmar) != 's');
-
+    //TODO: Colocar aqui o guardar das varias estruturas
 
     return 0;
 }
-
 
 /* ############################ Funções ############################ */
 
@@ -363,7 +371,9 @@ void verificar_ficheiro(char nome[]){
 
     ficheiro = fopen(nome, "rb");
     if(ficheiro == NULL){
+        printf("\n\nCriando o Ficheiro\n\n");
         criar_ficheiro(nome);
+        printf("\n\nO seu Ficheiro foi criado com Sucesso\n\n");
     }
     fclose(ficheiro);
 }
@@ -377,11 +387,102 @@ void criar_ficheiro(char nome[]){
 
 /* ## Estudante ## */
 
-int ler_f_estudantes(t_estudante alunos[]){
-    int numero_estudante;
+/**
+ * Ler do ficheiro declarado no inicio do codigo, os valores guardados no ficheiro
+ * @param alunos
+ * @return int
+ */
+void ler_f_estudantes(t_estudante alunos[], int *numero_estudantes){
+    FILE *ficheiro;
 
-    return numero_estudante;
+    verificar_ficheiro(FICHEIRO_ESTUDANTE);
 
+    ficheiro = fopen(FICHEIRO_ESTUDANTE, "rb");
+    fread(numero_estudantes, sizeof(int), 1, ficheiro);
+    fread(alunos, sizeof(t_estudante), *numero_estudantes, ficheiro);
+    fclose(ficheiro);
+}
+
+/**
+ * Vai guardar todos os dados que estão na estrutura dos estudantes
+ * @param alunos
+ * @param numero_estudantes
+ */
+void guardar_f_estudantes(t_estudante alunos[], int *numero_estudantes){
+    FILE *ficheiro;
+
+    verificar_ficheiro(FICHEIRO_ESTUDANTE);
+
+    ficheiro = fopen(FICHEIRO_ESTUDANTE, "wb");
+    fwrite(numero_estudantes, sizeof(int), 1, ficheiro);
+    fwrite(alunos, sizeof(t_estudante), *numero_estudantes, ficheiro);
+    fclose(ficheiro);
+}
+/* ## Atividade ## */
+
+/**
+ * Ler do ficheiro declarado no inicio do codigo, os valores guardados no ficheiro
+ * @param alunos
+ * @return int
+ */
+void ler_f_atividades(t_atividades atividades[], int *numero_atividades){
+    FILE *ficheiro;
+
+    verificar_ficheiro(FICHEIRO_ATIVIDADES);
+
+    ficheiro = fopen(FICHEIRO_ATIVIDADES, "rb");
+    fread(numero_atividades, sizeof(int), 1, ficheiro);
+    fread(atividades, sizeof(t_atividades), *numero_atividades, ficheiro);
+    fclose(ficheiro);
+}
+
+/**
+ * Vai guardar todos os dados que estão na estrutura dos estudantes
+ * @param alunos
+ * @param numero_estudantes
+ */
+void guardar_f_atividades(t_atividades atividades[], int *numero_atividades){
+    FILE *ficheiro;
+
+    verificar_ficheiro(FICHEIRO_ATIVIDADES);
+
+    ficheiro = fopen(FICHEIRO_ATIVIDADES, "wb");
+    fwrite(numero_atividades, sizeof(int), 1, ficheiro);
+    fwrite(atividades, sizeof(t_atividades), *numero_atividades, ficheiro);
+    fclose(ficheiro);
+}
+/* ## Inscrições ## */
+
+/**
+ * Ler do ficheiro declarado no inicio do codigo, os valores guardados no ficheiro
+ * @param alunos
+ * @return int
+ */
+void ler_f_inscricoes(t_inscricoes inscricoes[], int *numero_inscricoes){
+    FILE *ficheiro;
+
+    verificar_ficheiro(FICHEIRO_INSCRICOES);
+
+    ficheiro = fopen(FICHEIRO_INSCRICOES, "rb");
+    fread(numero_inscricoes, sizeof(int), 1, ficheiro);
+    fread(inscricoes, sizeof(t_inscricoes), *numero_inscricoes, ficheiro);
+    fclose(ficheiro);
+}
+
+/**
+ * Vai guardar todos os dados que estão na estrutura dos estudantes
+ * @param alunos
+ * @param numero_estudantes
+ */
+void guardar_f_inscricoes(t_inscricoes inscricoes[], int *numero_inscricoes){
+    FILE *ficheiro;
+
+    verificar_ficheiro(FICHEIRO_INSCRICOES);
+
+    ficheiro = fopen(FICHEIRO_INSCRICOES, "wb");
+    fwrite(numero_inscricoes, sizeof(int), 1, ficheiro);
+    fwrite(inscricoes, sizeof(t_inscricoes), *numero_inscricoes, ficheiro);
+    fclose(ficheiro);
 }
 
 /* ####### Extras  ####### */
