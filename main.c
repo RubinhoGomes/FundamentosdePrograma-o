@@ -104,25 +104,25 @@ void guardar_f_inscricoes(t_inscricoes [], int*);
 
 /* Estudante */
 
-void atualizar_estudante(t_estudante alunos[], int, int);
+void atualizar_estudante(t_estudante [], int, int);
 
-int remover_estudante(t_estudante alunos[], int, int);
+int remover_estudante(t_estudante [], int, int);
 
 int ler_opcao();
 
-int encontrar_nif(t_estudante alunos[], int, unsigned int);
+int encontrar_nif(t_estudante [], int, unsigned int);
 
-unsigned int pedir_nif(char frase[]);
+unsigned int pedir_nif(char []);
 
 /* Atividades */
-void atualizar_atividade(t_atividades atividades[], int);
+void atualizar_atividade(t_atividades [], int);
 
-int remover_atividade(t_atividades atividades[], int);
+int remover_atividade(t_atividades [], int);
 
 /* Inscrições */
-void atualizar_inscricao(t_inscricoes inscricoes[], int);
+void atualizar_inscricao(t_inscricoes [], int);
 
-int remover_inscricao(t_inscricoes inscricoes[], int);
+int remover_inscricao(t_inscricoes [], int);
 
 /*  ####### Menu #######  */
 
@@ -138,13 +138,15 @@ int menu_ver_atividades();
 
 /* ####### Estatistica ####### */
 // TODO: Fazer Estatisticas
-void estatistica(t_atividades atividades[], int numero_atividades);
+void estatistica(t_atividades [], int, t_estudante [], int, t_inscricoes [], int);
 
 void atividades_realizadas(t_atividades [], int);
 
-int percentagem_inscricoes(t_inscricoes [], int, t_estudante [], int);
+void percentagem_inscricoes(t_inscricoes [], int, t_estudante [], int);
 
 int valor_total(t_inscricoes [], int, char [], char [], t_atividades [], int); // Inscrições -- Data -- Hora -- Atividades
+
+void calcular_percentagem(int [], int);
 
 /* ####### Saida ####### */
 
@@ -265,7 +267,7 @@ int main(){
                 break;
 
             case 4:
-                estatistica(atividades, numero_atividades);
+                estatistica(atividades, numero_atividades, alunos, numero_estudante, inscricoes, numero_inscricoes);
                 break;
             case 0:
                 confirmar = confirmar_saida();
@@ -692,10 +694,10 @@ int menu_inscricoes(){
 
 /* ####### Estatistica ####### */
 
-void estatistica(t_atividades atividades[], int numero_atividades){
+void estatistica(t_atividades atividades[], int numero_atividades, t_estudante alunos[], int numero_estudantes, t_inscricoes inscricoes[], int numero_inscricoes){
 
     atividades_realizadas(atividades, numero_atividades);
-
+    percentagem_inscricoes(inscricoes, numero_inscricoes, alunos, numero_estudantes);
 }
 
 void atividades_realizadas(t_atividades atividades[], int numero_atividades){
@@ -715,7 +717,38 @@ void atividades_realizadas(t_atividades atividades[], int numero_atividades){
             ativ_reali_ae[4] += 1;
         }
     }
-    printf("AE-ESTG: %d\tAE-ESECS: %d\tAE-ESSLEI: %d\tAE-ESAD: %d\tAE-ESTM: %d\n\n", ativ_reali_ae[0], ativ_reali_ae[1], ativ_reali_ae[2], ativ_reali_ae[3], ativ_reali_ae[4]);
+    printf("\n\nAE-ESTG: %d\tAE-ESECS: %d\tAE-ESSLEI: %d\tAE-ESAD: %d\tAE-ESTM: %d\n\n", ativ_reali_ae[0], ativ_reali_ae[1], ativ_reali_ae[2], ativ_reali_ae[3], ativ_reali_ae[4]);
+}
+
+void percentagem_inscricoes(t_inscricoes inscricoes[], int numero_inscricoes, t_estudante alunos[], int numero_estudantes){
+    int perc_insc_esc[5] = {0, 0, 0, 0, 0 };
+    int contador, contador_estudantes;
+
+    for(contador = 0; contador < numero_inscricoes; contador++){
+        for (contador_estudantes = 0; contador_estudantes < numero_estudantes; ++contador_estudantes) {
+            if(inscricoes[contador].id_estudante == alunos[contador_estudantes].id && strcmp(alunos[contador].escola, "ESTG") == 0){
+                perc_insc_esc[0]++;
+            } else if(inscricoes[contador].id_estudante == alunos[contador_estudantes].id && strcmp(alunos[contador].escola, "ESECS") == 0) {
+                perc_insc_esc[1]++;
+            } else if(inscricoes[contador].id_estudante == alunos[contador_estudantes].id && strcmp(alunos[contador].escola, "ESSLEI") == 0) {
+                perc_insc_esc[2]++;
+            } else if(inscricoes[contador].id_estudante == alunos[contador_estudantes].id && strcmp(alunos[contador].escola, "ESAD") == 0) {
+                perc_insc_esc[3]++;
+            } else if(inscricoes[contador].id_estudante == alunos[contador_estudantes].id && strcmp(alunos[contador].escola, "ESTM") == 0) {
+                perc_insc_esc[4]++;
+            }
+        }
+    }
+    calcular_percentagem(perc_insc_esc, 5);
+    printf("\n\nESTG: %d\tESECS: %d\tESSLEI: %d\tESAD: %d\tESTM: %d\n\n", perc_insc_esc[0], perc_insc_esc[1], perc_insc_esc[2], perc_insc_esc[3], perc_insc_esc[4]);
+
+}
+
+void calcular_percentagem(int valores[], int quantidade){
+    int contador;
+    for(contador = 0; contador < quantidade; contador++){
+        valores[contador] = (valores[contador] / NUMERO_INSCRICOES) * 100;
+    }
 }
 
 /* ####### Saida ####### */
