@@ -715,7 +715,7 @@ void estatistica(t_atividades atividades[], int numero_atividades, t_estudante a
         //case 3: //Nada
            // break;
         default:
-            printf("Opção invalida");
+            printf("Opcao invalida\n");
             break;
     }
 }
@@ -761,7 +761,7 @@ void percentagem_inscricoes(t_inscricoes inscricoes[], int numero_inscricoes, t_
         }
     }
     calcular_percentagem(perc_insc_esc, 5);
-    printf("\n\nESTG: %d\tESECS: %d\tESSLEI: %d\tESAD: %d\tESTM: %d\n\n", perc_insc_esc[0], perc_insc_esc[1], perc_insc_esc[2], perc_insc_esc[3], perc_insc_esc[4]);
+    printf("\n\nESTG: %d\t ESECS: %d\t ESSLEI: %d\t ESAD: %d\t ESTM: %d\n\n", perc_insc_esc[0], perc_insc_esc[1], perc_insc_esc[2], perc_insc_esc[3], perc_insc_esc[4]);
     system("pause");
 
 }
