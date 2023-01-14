@@ -23,7 +23,7 @@
 
 
 /* ############################ Estruturas ############################ */
-
+// TODO alterar nif para Unsigned INT
 typedef struct {
     unsigned int id; // %u <<- Ao contrario do int que é %d
     char nome[81];
@@ -92,13 +92,11 @@ void ler_f_estudantes(t_estudante [], int*);
 void guardar_f_estudantes(t_estudante [], int*);
 
 /* ## Atividades ## */
-// TODO: FAZER FICHEIRO ATIVIDADES
 void ler_f_atividades(t_atividades [], int*);
 
 void guardar_f_atividades(t_atividades [], int*);
 
 /* ## Inscrições ## */
-// TODO: FAZER FICHEIRO INSCRIÇÕES
 void ler_f_inscricoes(t_inscricoes [], int*);
 
 void guardar_f_inscricoes(t_inscricoes [], int*);
@@ -173,7 +171,9 @@ int main(){
 
     setlocale(LC_ALL, "Portuguese");
 
-    //TODO: Colocar aqui o ler das varias estruturas
+    ler_f_estudantes(alunos, &numero_estudante);
+    ler_f_atividades(atividades, &numero_atividades);
+    ler_f_inscricoes(inscricoes, &numero_inscricoes);
 
 
     do {
@@ -263,7 +263,10 @@ int main(){
         }
 
     } while(tolower(confirmar) != 's');
-    //TODO: Colocar aqui o guardar das varias estruturas
+
+    guardar_f_estudantes(alunos, &numero_estudante);
+    guardar_f_atividades(atividades, &numero_atividades);
+    guardar_f_inscricoes(inscricoes, &numero_inscricoes);
 
     return 0;
 }
@@ -365,19 +368,24 @@ void mostrar_dados_atividade(t_atividades atividades[], int numero_atividades){
 
 
 /* ####### Ficheiros ####### */
-
+/**
+ * Verifica se o ficheiro ja existe ou se precisa de ser criado
+ * @param nome
+ */
 void verificar_ficheiro(char nome[]){
     FILE *ficheiro;
 
     ficheiro = fopen(nome, "rb");
     if(ficheiro == NULL){
-        printf("\n\nCriando o Ficheiro\n\n");
         criar_ficheiro(nome);
-        printf("\n\nO seu Ficheiro foi criado com Sucesso\n\n");
     }
     fclose(ficheiro);
 }
 
+/**
+ * Cria o ficheiro
+ * @param nome
+ */
 void criar_ficheiro(char nome[]){
     FILE *ficheiro;
 
@@ -495,7 +503,6 @@ void guardar_f_inscricoes(t_inscricoes inscricoes[], int *numero_inscricoes){
  * @param numero_estudantes
  * @param indice_estudante
  */
-
 void atualizar_estudante(t_estudante alunos[], int numero_estudantes, int indice_estudante){
 
     if(indice_estudante >= 0){
@@ -513,7 +520,6 @@ void atualizar_estudante(t_estudante alunos[], int numero_estudantes, int indice
  * @param indice_remover
  * @return int
  */
-
 int remover_estudante(t_estudante alunos[], int numero_estudante, int indice_remover){
 
     if(indice_remover >= 0){
@@ -530,7 +536,6 @@ int remover_estudante(t_estudante alunos[], int numero_estudante, int indice_rem
  * @param frase
  * @return unsigned int
  */
-
 unsigned int pedir_nif(char frase[]){ // Esta função vai servir para pedir o NIF para ser utilizado no remover e atualizar estudante.
 
     unsigned int nif = 0;
@@ -549,7 +554,6 @@ unsigned int pedir_nif(char frase[]){ // Esta função vai servir para pedir o N
  * @param nif
  * @return int
  */
-
 int encontrar_nif(t_estudante alunos[], int numero_estudante, unsigned int nif){ // Esta função vai encontrar o NIF dos estudantes que existem, caso não encontre vai retornar o valor -1
 
     char nif_char[10];
@@ -571,6 +575,7 @@ int encontrar_nif(t_estudante alunos[], int numero_estudante, unsigned int nif){
 }
 
 /* ## Atividades ## */
+
 
 /* ## Inscrições ## */
 
@@ -642,7 +647,6 @@ void estatistica(){
     printf("Bom Dia.");
 
 }
-
 
 /* ####### Saida ####### */
 
