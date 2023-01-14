@@ -49,8 +49,8 @@ typedef struct {
 typedef struct {
 
     unsigned int id;
-    int id_estudante;
-    int id_atividade;
+    unsigned int id_estudante;
+    unsigned int id_atividade;
     float pagamento;
     char data[10];
     char hora[10];
@@ -115,13 +115,11 @@ int encontrar_nif(t_estudante alunos[], int, unsigned int);
 unsigned int pedir_nif(char frase[]);
 
 /* Atividades */
-// TODO: NOT URGENT: Mas Fazer EXTRA Atividades
 void atualizar_atividade(t_atividades atividades[], int);
 
 int remover_atividade(t_atividades atividades[], int);
 
 /* Inscrições */
-// TODO: NOT URGENT: Mas Fazer EXTRA Inscrições
 void atualizar_inscricao(t_inscricoes inscricoes[], int);
 
 int remover_inscricao(t_inscricoes inscricoes[], int);
@@ -140,13 +138,13 @@ int menu_ver_atividades();
 
 /* ####### Estatistica ####### */
 // TODO: Fazer Estatisticas
-void estatistica();
+void estatistica(t_atividades atividades[], int numero_atividades);
 
-int atividades_realizadas(t_atividades atividades[], int);
+void atividades_realizadas(t_atividades [], int);
 
-int percentagem_inscricoes(t_inscricoes inscricoes[], int);
+int percentagem_inscricoes(t_inscricoes [], int, t_estudante [], int);
 
-int valor_total();
+int valor_total(t_inscricoes [], int, char [], char [], t_atividades [], int); // Inscrições -- Data -- Hora -- Atividades
 
 /* ####### Saida ####### */
 
@@ -193,7 +191,7 @@ int main(){
                         // Mostrar Dados
                         mostrar_dados_estudante(alunos, numero_estudante);
                         break;
-                    case 3:
+                    /*case 3:
                         // Atualizar estudantes
                         nif = pedir_nif("que deseja atualiza");
                         indice_estudante = encontrar_nif(alunos, numero_estudante, nif);
@@ -204,10 +202,12 @@ int main(){
                         nif = pedir_nif("que deseja remover"); // Vai pedir ao utilizador o NIF
                         indice_estudante = encontrar_nif(alunos, numero_estudante, nif); // Vai percorrer os estudantes a procura do NIF inserido e devolver o indice onde foi encontrado
                         numero_estudante = remover_estudante(alunos, numero_estudante, indice_estudante); // Vai remover o estudante com o NIF inserido e encontrado anteriormente
+                        break;*/
+                    default:
+                        printf("\n\nNao inseriu uma opcao valida\n\n");
                         break;
                 }
                 break;
-
             case 2:
                 // Caso seja escolhida a opção de gestão das atividades
                 switch (menu_atividades()) {
@@ -222,13 +222,16 @@ int main(){
                         // Mostrar Atividade
                         mostrar_dados_atividade(atividades, numero_atividades);
                         break;
-                    case 3:
+                    /*case 3:
                         //Atualizar Atividade
                         printf("Numero 2");
                         break;
                     case 4:
                         //Remover Atividade
                         printf("Numero 3");
+                        break;*/
+                    default:
+                        printf("\n\nNao inseriu uma opcao valida\n\n");
                         break;
                 }
                 break;
@@ -241,23 +244,34 @@ int main(){
                         break;
                     case 1:
                         //Ler Inscrições
+                        numero_inscricoes = ler_inscricao(inscricoes, numero_inscricoes);
                         break;
                     case 2:
-                        //Atualizar Inscrições
-                        printf("Numero 2");
+                        //Mostrar Dados
+                        mostrar_dados_inscricao(inscricoes, numero_inscricoes);
                         break;
-                    case 3:
-                        //Remover Inscrições
+                    /*case 3:
+                        //Atualizar Inscrições
                         printf("Numero 3");
+                        break;
+                    case 4:
+                        //Remover Inscrições
+                        printf("Numero 4");
+                        break;*/
+                    default:
+                        printf("\n\nNao inseriu uma opcao valida\n\n");
                         break;
                 }
                 break;
 
             case 4:
-                estatistica();
+                estatistica(atividades, numero_atividades);
                 break;
             case 0:
                 confirmar = confirmar_saida();
+                break;
+            default:
+                printf("\n\nNao inseriu uma opcao valida\n\n");
                 break;
         }
 
@@ -310,7 +324,7 @@ void mostrar_dados_estudante(t_estudante alunos[], int numero_estudantes){
         if(alunos[contador].id > 0){
             printf("* [%u]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s] *\n", alunos[contador].id, alunos[contador].nome, alunos[contador].escola, alunos[contador].nif, alunos[contador].email, alunos[contador].telefone);
         } else if(alunos[contador].id <= 0 && numero_estudantes <= 0){
-            printf("\n\n** Não existem dados dos estudantes. **\n\n");
+            printf("\n\n** Nao existem dados dos estudantes. **\n\n");
         }
     }
     system("pause");
@@ -322,12 +336,11 @@ void mostrar_dados_estudante(t_estudante alunos[], int numero_estudantes){
  * @param numero_atividades
  * @return int
  */
-
 int ler_atividade(t_atividades atividades[], int numero_atividades){
 
     atividades[numero_atividades].id = numero_atividades + 1;
 
-    printf("Insira a desginação da atividade: ");
+    printf("Insira a desginacao da atividade: ");
     scanf(" %[^\n]s", atividades[numero_atividades].designacao);
     printf("Insira a data da atividade: ");
     scanf(" %[^\n]s", atividades[numero_atividades].data);
@@ -340,7 +353,7 @@ int ler_atividade(t_atividades atividades[], int numero_atividades){
     printf("Insira a localizacao: ");
     scanf(" %[^\n]s", atividades[numero_atividades].local);
     printf("Insira o preco da atividade: ");
-    scanf(" %f", atividades[numero_atividades].preco);
+    scanf(" %f", &atividades[numero_atividades].preco);
 
     return (numero_atividades + 1);
 }
@@ -356,15 +369,50 @@ void mostrar_dados_atividade(t_atividades atividades[], int numero_atividades){
         if(atividades[contador].id > 0){
             printf("* [%u]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s]\t[%f] *\n", atividades[contador].id, atividades[contador].designacao, atividades[contador].data, atividades[contador].hora, atividades[contador].tipo, atividades[contador].associacao_estudantes, atividades[contador].local, atividades[contador].preco);
         } else if(atividades[contador].id <= 0 && numero_atividades <= 0){
-            printf("\n\n** Não existem dados dos estudantes. **\n\n");
+            printf("\n\n** Não existem dados das atividades. **\n\n");
         }
     }
     system("pause");
 }
 
+/**
+ * Ler Inscrições
+ * @param inscricoes
+ * @param numero_inscricoes
+ * @return int
+ */
+int ler_inscricao(t_inscricoes inscricoes[], int numero_inscricoes){
 
-/* ####### Inscrições ####### */
+    inscricoes[numero_inscricoes].id = numero_inscricoes + 1;
+    printf("Insira o id do estudante: ");
+    scanf(" %u", &inscricoes[numero_inscricoes].id_estudante);
+    printf("Insira o id do atividade: ");
+    scanf(" %u", &inscricoes[numero_inscricoes].id_atividade);
+    printf("Insira o preco: ");
+    scanf(" %f", &inscricoes[numero_inscricoes].pagamento);
+    printf("Insira a data da inscricao: ");
+    scanf(" %[^\n]s", inscricoes[numero_inscricoes].data);
+    printf("Insira a hora da inscricao: ");
+    scanf(" %[^\n]s", inscricoes[numero_inscricoes].hora);
 
+    return numero_inscricoes + 1;
+}
+
+/**
+ * Mostrar dados inscrição
+ * @param inscricoes
+ * @param numero_inscricao
+ */
+void mostrar_dados_inscricao(t_inscricoes inscricoes[], int numero_inscricao){
+    for(int contador = 0; contador < numero_inscricao; contador++){
+        if(inscricoes[contador].id > 0){
+            printf("* [%u]\t[%u]\t[%u]\t[%f]\t[%s]\t[%s] *\n", inscricoes[contador].id, inscricoes[contador].id_estudante, inscricoes[contador].id_atividade, inscricoes[contador].pagamento, inscricoes[contador].data, inscricoes[contador].hora);
+        } else if(inscricoes[contador].id <= 0 && numero_inscricao <= 0){
+            printf("\n\n** Não existem dados das inscricao. **\n\n");
+        }
+    }
+    system("pause");
+}
 
 /* ####### Ficheiros ####### */
 /**
@@ -508,7 +556,7 @@ void atualizar_estudante(t_estudante alunos[], int numero_estudantes, int indice
         printf("\nInsira os novos valores para o estudante, %s\n", alunos[indice_estudante].nome);
         ler_estudantes(alunos, indice_estudante);
     } else {
-        printf("\n **Não foi encontrado o aluno com esse email** \n");
+        printf("\n **Nao foi encontrado o aluno com esse email** \n");
     }
 }
 
@@ -569,7 +617,7 @@ int encontrar_nif(t_estudante alunos[], int numero_estudante, unsigned int nif){
     }
 
     if(index < 0){
-        printf("\n\nNIF não encontrado\n\n");
+        printf("\n\nNIF nao encontrado\n\n");
     }
 
     return index;
@@ -587,7 +635,7 @@ int ler_opcao(){ // Esta função vai ler uma opção listada nos menu's e vai d
 
     int opcao = 0;
 
-    printf("Insira uma opção: ");
+    printf("Insira uma opcao: ");
     scanf(" %d", &opcao);
 
     return opcao;
@@ -596,10 +644,10 @@ int ler_opcao(){ // Esta função vai ler uma opção listada nos menu's e vai d
 int menu_principal(){
 
     printf("########## Menu Principal ##########\n\n");
-    printf("[1] - Gestão dos dados dos estudantes\n");
-    printf("[2] - Gestão dos dados das atividade\n");
-    printf("[3] - Gestão dos dados das inscrições\n");
-    printf("[4] - Consultar as estatísticas\n");
+    printf("[1] - Gestao dos dados dos Estudantes\n");
+    printf("[2] - Gestao dos dados das Atividade\n");
+    printf("[3] - Gestao dos dados das Inscricoes\n");
+    printf("[4] - Consultar as Estatisticas\n");
     printf("[0] - Sair\n\n");
 
     return ler_opcao();
@@ -609,10 +657,10 @@ int menu_principal(){
 int menu_estudantes(){
 
     printf("########## Menu Estudante ##########\n\n");
-    printf("[1] - Registar novo estudante\n");
-    printf("[2] - Ver dados dos Estudantes\n");
-    printf("[3] - Atualizar estudante\n");
-    printf("[4] - Remover Estudante\n");
+    printf("[1] - Registar Novo Estudante\n");
+    printf("[2] - Ver Dados dos Estudantes\n");
+    //printf("[3] - Atualizar Estudante\n");
+    //printf("[4] - Remover Estudante\n");
     printf("[0] - Sair\n\n");
 
     return ler_opcao();
@@ -620,11 +668,11 @@ int menu_estudantes(){
 
 int menu_atividades(){
 
-    printf("########## Menu Estudante ##########\n\n");
-    printf("[1] - Registar nova atividade\n");
-    printf("[2] - Mostrar atividades\n");
-    printf("[3] - Atualizar atividade\n");
-    printf("[3] - Remover atividade\n");
+    printf("########## Menu Atividades ##########\n\n");
+    printf("[1] - Registar Nova Atividade\n");
+    printf("[2] - Mostrar Atividades\n");
+    //printf("[3] - Atualizar Atividade\n");
+    //printf("[3] - Remover Atividade\n");
     printf("[0] - Sair\n\n");
 
     return ler_opcao();
@@ -632,10 +680,11 @@ int menu_atividades(){
 
 int menu_inscricoes(){
 
-    printf("########## Menu Estudante ##########\n\n");
-    printf("[1] - Registar nova inscrição\n");
-    printf("[2] - Atualizar inscrição\n");
-    printf("[3] - Remover inscrição\n");
+    printf("########## Menu Inscricao ##########\n\n");
+    printf("[1] - Registar Nova Inscricao\n");
+    printf("[2] - Mostrar Inscricoes\n");
+    //printf("[3] - Atualizar Inscricao\n");
+    //printf("[4] - Remover Inscricao\n");
     printf("[0] - Sair\n\n");
 
     return ler_opcao();
@@ -643,10 +692,30 @@ int menu_inscricoes(){
 
 /* ####### Estatistica ####### */
 
-void estatistica(){
+void estatistica(t_atividades atividades[], int numero_atividades){
 
-    printf("Bom Dia.");
+    atividades_realizadas(atividades, numero_atividades);
 
+}
+
+void atividades_realizadas(t_atividades atividades[], int numero_atividades){
+
+    int ativ_reali_ae[5] = {0, 0, 0, 0, 0};
+
+    for (int contador = 0; contador < numero_atividades; ++contador) {
+        if(strcmp(atividades[contador].associacao_estudantes, "AE-ESTG") == 0){
+            ativ_reali_ae[0] += 1;
+        } else if(strcmp(atividades[contador].associacao_estudantes, "AE-ESECS") == 0){
+            ativ_reali_ae[1] += 1;
+        } else if(strcmp(atividades[contador].associacao_estudantes, "AE-ESSLEI") == 0){
+            ativ_reali_ae[2] += 1;
+        } else if(strcmp(atividades[contador].associacao_estudantes, "AE-ESAD") == 0){
+            ativ_reali_ae[3] += 1;
+        } else if(strcmp(atividades[contador].associacao_estudantes, "AE-ESTM") == 0){
+            ativ_reali_ae[4] += 1;
+        }
+    }
+    printf("AE-ESTG: %d\tAE-ESECS: %d\tAE-ESSLEI: %d\tAE-ESAD: %d\tAE-ESTM: %d\n\n", ativ_reali_ae[0], ativ_reali_ae[1], ativ_reali_ae[2], ativ_reali_ae[3], ativ_reali_ae[4]);
 }
 
 /* ####### Saida ####### */
