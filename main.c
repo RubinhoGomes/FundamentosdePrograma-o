@@ -21,7 +21,6 @@
 #define FICHEIRO_ATIVIDADES "atividades.dat" // Nome do Ficheiro para guardar os dados
 #define FICHEIRO_INSCRICOES "inscricoes.dat" // Nome do Ficheiro para guardar os dados
 
-
 /* ############################ Estruturas ############################ */
 // TODO alterar nif para Unsigned INT
 typedef struct {
@@ -336,14 +335,14 @@ int ler_atividade(t_atividades atividades[], int numero_atividades){
     scanf(" %[^\n]s", atividades[numero_atividades].hora);
     printf("Insira o genero da atividade: ");
     scanf(" %[^\n]s", atividades[numero_atividades].tipo);
-    printf("Insira a associação de estudantes promotora da atividade: ");
+    printf("Insira a associacao de estudantes promotora da atividade: ");
     scanf(" %[^\n]s", atividades[numero_atividades].associacao_estudantes);
-    printf("Insira a localização: ");
+    printf("Insira a localizacao: ");
     scanf(" %[^\n]s", atividades[numero_atividades].local);
-    printf("Insira a associação de estudantes: ");
+    printf("Insira o preco da atividade: ");
     scanf(" %f", atividades[numero_atividades].preco);
 
-    return numero_atividades + 1;
+    return (numero_atividades + 1);
 }
 
 /**
@@ -355,7 +354,7 @@ void mostrar_dados_atividade(t_atividades atividades[], int numero_atividades){
 
     for(int contador = 0; contador < numero_atividades; contador++){
         if(atividades[contador].id > 0){
-            printf("* [%u] *\n", atividades[contador].id); // 	[%s]	[%s]	[%s]	[%s]	[%s]
+            printf("* [%u]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s]\t[%f] *\n", atividades[contador].id, atividades[contador].designacao, atividades[contador].data, atividades[contador].hora, atividades[contador].tipo, atividades[contador].associacao_estudantes, atividades[contador].local, atividades[contador].preco);
         } else if(atividades[contador].id <= 0 && numero_atividades <= 0){
             printf("\n\n** Não existem dados dos estudantes. **\n\n");
         }
@@ -533,10 +532,11 @@ int remover_estudante(t_estudante alunos[], int numero_estudante, int indice_rem
 
 /**
  * Pedir NIF
+ * Esta função vai servir para pedir o NIF para ser utilizado no remover e atualizar estudante.
  * @param frase
  * @return unsigned int
  */
-unsigned int pedir_nif(char frase[]){ // Esta função vai servir para pedir o NIF para ser utilizado no remover e atualizar estudante.
+unsigned int pedir_nif(char frase[]){
 
     unsigned int nif = 0;
 
@@ -549,12 +549,13 @@ unsigned int pedir_nif(char frase[]){ // Esta função vai servir para pedir o N
 
 /**
  * Encontrar o NIF
+ * Esta função vai encontrar o NIF dos estudantes que existem, caso não encontre vai retornar o valor -1
  * @param alunos
  * @param numero_estudante
  * @param nif
  * @return int
  */
-int encontrar_nif(t_estudante alunos[], int numero_estudante, unsigned int nif){ // Esta função vai encontrar o NIF dos estudantes que existem, caso não encontre vai retornar o valor -1
+int encontrar_nif(t_estudante alunos[], int numero_estudante, unsigned int nif){
 
     char nif_char[10];
     int index = -1;
@@ -656,7 +657,7 @@ char  confirmar_saida(){
 
     do {
 
-        printf("Deseja mesmo sair?");
+        printf("Deseja mesmo sair? (S/N): ");
         scanf(" %c", &confirmar);
 
     } while(tolower(confirmar) != 's' && tolower(confirmar) != 'n');
