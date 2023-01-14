@@ -22,12 +22,11 @@
 #define FICHEIRO_INSCRICOES "inscricoes.dat" // Nome do Ficheiro para guardar os dados
 
 /* ############################ Estruturas ############################ */
-// TODO alterar nif para Unsigned INT
 typedef struct {
     unsigned int id; // %u <<- Ao contrario do int que é %d
     char nome[81];
     char escola[7];
-    char nif[10];
+    unsigned int nif;
     char email[120];
     char telefone[10];
 
@@ -133,18 +132,17 @@ int menu_estudantes();
 int menu_atividades();
 
 int menu_inscricoes();
-// TODO: Fazer Menu Atividades Para vizualizarmos os vários valores das estatisticas
+
 int menu_ver_atividades();
 
 /* ####### Estatistica ####### */
-// TODO: Fazer Estatisticas
-void estatistica(t_atividades [], int, t_estudante [], int, t_inscricoes [], int);
+void estatistica(t_atividades [], int, t_estudante [], int, t_inscricoes [], int, int);
 
 void atividades_realizadas(t_atividades [], int);
 
 void percentagem_inscricoes(t_inscricoes [], int, t_estudante [], int);
 
-int valor_total(t_inscricoes [], int, char [], char [], t_atividades [], int); // Inscrições -- Data -- Hora -- Atividades
+// void valor_total(t_inscricoes [], int, char [], char [], t_atividades [], int); // Inscrições -- Data -- Hora -- Atividades
 
 void calcular_percentagem(int [], int);
 
@@ -160,11 +158,10 @@ int main(){
     t_atividades atividades[NUMERO_ATIVIDAES];
     t_inscricoes inscricoes[NUMERO_INSCRICOES];
 
-    int numero_estudante = 0;
-    int numero_atividades = 0;
-    int numero_inscricoes = 0;
+    int numero_estudante = 0, numero_atividades = 0, numero_inscricoes = 0;
     unsigned int nif = 0;
     int indice_estudante = -1;
+    int opcao_atividades = -1;
 
     char confirmar = ' ';
 
@@ -265,9 +262,10 @@ int main(){
                         break;
                 }
                 break;
-
             case 4:
-                estatistica(atividades, numero_atividades, alunos, numero_estudante, inscricoes, numero_inscricoes);
+
+                opcao_atividades = menu_ver_atividades();
+                estatistica(atividades, numero_atividades, alunos, numero_estudante, inscricoes, numero_inscricoes, opcao_atividades);
                 break;
             case 0:
                 confirmar = confirmar_saida();
@@ -305,7 +303,7 @@ int ler_estudantes(t_estudante alunos[], int numero_estudantes){
     printf("Insira a sua escola: ");
     scanf(" %[^\n]s", alunos[numero_estudantes].escola);
     printf("Insira o seu nif: ");
-    scanf(" %[^\n]s", alunos[numero_estudantes].nif);
+    scanf(" %u", &alunos[numero_estudantes].nif);
     printf("Insira o seu email: ");
     scanf(" %[^\n]s", alunos[numero_estudantes].email);
     printf("Insira o seu telefone: ");
@@ -322,9 +320,10 @@ int ler_estudantes(t_estudante alunos[], int numero_estudantes){
 
 void mostrar_dados_estudante(t_estudante alunos[], int numero_estudantes){
     printf("\n");
-    for(int contador = 0; contador <= numero_estudantes; contador++){
+    int contador;
+    for( contador = 0; contador <= numero_estudantes; contador++){
         if(alunos[contador].id > 0){
-            printf("* [%u]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s] *\n", alunos[contador].id, alunos[contador].nome, alunos[contador].escola, alunos[contador].nif, alunos[contador].email, alunos[contador].telefone);
+            printf("* [%u]\t[%s]\t[%s]\t[%u]\t[%s]\t[%s] *\n", alunos[contador].id, alunos[contador].nome, alunos[contador].escola, alunos[contador].nif, alunos[contador].email, alunos[contador].telefone);
         } else if(alunos[contador].id <= 0 && numero_estudantes <= 0){
             printf("\n\n** Nao existem dados dos estudantes. **\n\n");
         }
@@ -366,10 +365,10 @@ int ler_atividade(t_atividades atividades[], int numero_atividades){
  * @param numero_atividades
  */
 void mostrar_dados_atividade(t_atividades atividades[], int numero_atividades){
-
-    for(int contador = 0; contador < numero_atividades; contador++){
+    int contador;
+    for(contador = 0; contador < numero_atividades; contador++){
         if(atividades[contador].id > 0){
-            printf("* [%u]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s]\t[%f] *\n", atividades[contador].id, atividades[contador].designacao, atividades[contador].data, atividades[contador].hora, atividades[contador].tipo, atividades[contador].associacao_estudantes, atividades[contador].local, atividades[contador].preco);
+            printf("* [%u]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s]\t[%s]\t[%.2f] *\n", atividades[contador].id, atividades[contador].designacao, atividades[contador].data, atividades[contador].hora, atividades[contador].tipo, atividades[contador].associacao_estudantes, atividades[contador].local, atividades[contador].preco);
         } else if(atividades[contador].id <= 0 && numero_atividades <= 0){
             printf("\n\n** Não existem dados das atividades. **\n\n");
         }
@@ -406,9 +405,10 @@ int ler_inscricao(t_inscricoes inscricoes[], int numero_inscricoes){
  * @param numero_inscricao
  */
 void mostrar_dados_inscricao(t_inscricoes inscricoes[], int numero_inscricao){
-    for(int contador = 0; contador < numero_inscricao; contador++){
+    int contador;
+    for(contador = 0; contador < numero_inscricao; contador++){
         if(inscricoes[contador].id > 0){
-            printf("* [%u]\t[%u]\t[%u]\t[%f]\t[%s]\t[%s] *\n", inscricoes[contador].id, inscricoes[contador].id_estudante, inscricoes[contador].id_atividade, inscricoes[contador].pagamento, inscricoes[contador].data, inscricoes[contador].hora);
+            printf("* [%u]\t[%u]\t[%u]\t[%.2f]\t[%s]\t[%s] *\n", inscricoes[contador].id, inscricoes[contador].id_estudante, inscricoes[contador].id_atividade, inscricoes[contador].pagamento, inscricoes[contador].data, inscricoes[contador].hora);
         } else if(inscricoes[contador].id <= 0 && numero_inscricao <= 0){
             printf("\n\n** Não existem dados das inscricao. **\n\n");
         }
@@ -606,14 +606,10 @@ unsigned int pedir_nif(char frase[]){
  * @return int
  */
 int encontrar_nif(t_estudante alunos[], int numero_estudante, unsigned int nif){
-
-    char nif_char[10];
     int index = -1;
 
-    sprintf(nif_char, "%u", nif);
-
     for(int contador = 0; contador <= numero_estudante; contador++){
-        if(strcmp(alunos[contador].nif, nif_char) == 0){
+        if(alunos[contador].nif == nif){
             index = contador;
         }
     }
@@ -692,12 +688,36 @@ int menu_inscricoes(){
     return ler_opcao();
 }
 
+int menu_ver_atividades(){
+
+    printf("\n#### Menu Ver Estatisticas ####\n");
+    printf("[1] - Visualizar as Atividades Realizadas\n");
+    printf("[2] - Vizualizar Percentagem das Inscricoes por Escola\n");
+    //printf("[3] - Valor Total das Inscricoes por duas datas e por Tipo de Atividade\n");
+    printf("[0] - Sair\n\n");
+
+    return ler_opcao();
+}
+
 /* ####### Estatistica ####### */
 
-void estatistica(t_atividades atividades[], int numero_atividades, t_estudante alunos[], int numero_estudantes, t_inscricoes inscricoes[], int numero_inscricoes){
+void estatistica(t_atividades atividades[], int numero_atividades, t_estudante alunos[], int numero_estudantes, t_inscricoes inscricoes[], int numero_inscricoes, int opcao){
 
-    atividades_realizadas(atividades, numero_atividades);
-    percentagem_inscricoes(inscricoes, numero_inscricoes, alunos, numero_estudantes);
+    switch (opcao) {
+        case 0:
+            break;
+        case 1:
+            atividades_realizadas(atividades, numero_atividades);
+            break;
+        case 2:
+            percentagem_inscricoes(inscricoes, numero_inscricoes, alunos, numero_estudantes);
+            break;
+        //case 3: //Nada
+           // break;
+        default:
+            printf("Opção invalida");
+            break;
+    }
 }
 
 void atividades_realizadas(t_atividades atividades[], int numero_atividades){
@@ -718,6 +738,7 @@ void atividades_realizadas(t_atividades atividades[], int numero_atividades){
         }
     }
     printf("\n\nAE-ESTG: %d\tAE-ESECS: %d\tAE-ESSLEI: %d\tAE-ESAD: %d\tAE-ESTM: %d\n\n", ativ_reali_ae[0], ativ_reali_ae[1], ativ_reali_ae[2], ativ_reali_ae[3], ativ_reali_ae[4]);
+    system("pause");
 }
 
 void percentagem_inscricoes(t_inscricoes inscricoes[], int numero_inscricoes, t_estudante alunos[], int numero_estudantes){
@@ -741,6 +762,7 @@ void percentagem_inscricoes(t_inscricoes inscricoes[], int numero_inscricoes, t_
     }
     calcular_percentagem(perc_insc_esc, 5);
     printf("\n\nESTG: %d\tESECS: %d\tESSLEI: %d\tESAD: %d\tESTM: %d\n\n", perc_insc_esc[0], perc_insc_esc[1], perc_insc_esc[2], perc_insc_esc[3], perc_insc_esc[4]);
+    system("pause");
 
 }
 
@@ -751,6 +773,7 @@ void calcular_percentagem(int valores[], int quantidade){
     }
 }
 
+
 /* ####### Saida ####### */
 
 char  confirmar_saida(){
@@ -758,10 +781,8 @@ char  confirmar_saida(){
     char confirmar = ' ';
 
     do {
-
         printf("Deseja mesmo sair? (S/N): ");
         scanf(" %c", &confirmar);
-
     } while(tolower(confirmar) != 's' && tolower(confirmar) != 'n');
 
     return confirmar;
